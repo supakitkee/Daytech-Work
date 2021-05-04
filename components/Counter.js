@@ -1,30 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { Card } from "../components/Layouts/Card";
-import Button from "../components/Buttons/Button";
-import { IoClose } from "react-icons/io5";
+import Button from '../components/Buttons/Button';
+import Card from '../components/Layouts/Card';
+import { IoClose } from 'react-icons/io5';
+import React from 'react';
 
-export default function Counter({ title, list, onDelete, zero, setZero }) {
-  const handleDelete = function () {
-    onDelete(list);
-  };
+export default function Counter({ list, onDelete, onUpdateValue }) {
+  const count = list.value;
 
-  useEffect(() => {
-    if (zero == 'Counter') {
-      setCount(0);
-      setZero("");
-    }
-  }, [zero]);
+  let countClass = 'text-5xl rounded-full w-10 text-center focus:outline-none';
+  let countBlue = 'text-blue-500';
 
-  const [count, setCount] = useState(list.value);
-
-  let countClass = "text-5xl rounded-full w-10 text-center focus:outline-none";
-  let countBlue = "text-blue-500";
   let resetButton;
   let decrease;
   let disabled = true;
 
   const handleClick = () => {
-    setCount(0);
+    onUpdateValue(list.id, 0);
   };
 
   if (count == 0) {
@@ -42,34 +32,41 @@ export default function Counter({ title, list, onDelete, zero, setZero }) {
     );
     decrease = (
       <button
-        onClick={() => setCount(list.value - 1)}
+        onClick={() => onUpdateValue(list.id, count - 1)}
         className={`${countClass} + ${countBlue}`}
       >
         -
       </button>
     );
   }
-  list.value = count;
+
+  const handleDelete = function () {
+    onDelete(list);
+  };
+
   return (
-    <div class="md:inner md:w-1/2 pb-4 md:pr-4">
-      <Card title="Counter" key={list.id} onDelete={handleDelete} list={list}>
-        <div className="text-center">
-          <div className="flex items-center justify-center mt-4 mb-6">
-            {decrease}
-            <div className="text-6xl mx-7">{count}</div>
-            <button
-              onClick={() => setCount(list.value + 1)}
-              className={`${countClass} + ${countBlue}`}
-            >
-              +
-            </button>
-          </div>
-          {resetButton}
-          <div className="text-xs text-gray-400">
-            <div className="mt-6 -mb-2 text-center">{list.date}</div>
-          </div>
+    <Card
+      title='Counter'
+      closeBtn={<IoClose />}
+      key={list.id}
+      onDelete={handleDelete}
+    >
+      <div className='text-center'>
+        <div className='flex items-center justify-center mt-4 mb-6'>
+          {decrease}
+          <div className='text-6xl mx-7'>{count}</div>
+          <button
+            onClick={() => onUpdateValue(list.id, count + 1)}
+            className={`${countClass} + ${countBlue}`}
+          >
+            +
+          </button>
         </div>
-      </Card>
-    </div>
+        {resetButton}
+        <div className='text-xs text-gray-400'>
+          <div className='mt-6 -mb-2 text-center'>{list.date}</div>
+        </div>
+      </div>
+    </Card>
   );
 }

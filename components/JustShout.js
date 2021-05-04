@@ -1,42 +1,45 @@
 import EditJustX from './AddWidgets/EditJustX';
 import Card from '../components/Layouts/Card';
 import { IoClose } from 'react-icons/io5';
-import React, { useState } from 'react';
 import { MdEdit } from 'react-icons/md';
+import React, { useState } from 'react';
 import Modal from './Layouts/Modal';
 
-export default function JustSay({ list, onDelete, onEdit }) {
-  const [modalActiveEditJustSay, setModalActiveEditJustSay] = useState(false);
+export default function JustShout({ list, onDelete, onEditJustShout }) {
+  const [modalActiveEditJustShout, setModalActiveEditJustShout] = useState(
+    false
+  );
 
   const handleCancel = function () {
-    setModalActiveEditJustSay(false);
+    setModalActiveEditJustShout(false);
   };
+
   const handleDelete = function () {
     onDelete(list);
   };
 
   const handleEdit = function () {
-    setModalActiveEditJustSay(true);
+    setModalActiveEditJustShout(true);
   };
 
   const onEditSubmit = (id, value) => {
-    onEdit(id, value);
-    setModalActiveEditJustSay(false);
+    onEditJustShout(id, value);
+    setModalActiveEditJustShout(false);
   };
 
   return (
     <>
-      {modalActiveEditJustSay && (
+      {modalActiveEditJustShout && (
         <Modal onCancel={handleCancel}>
           <EditJustX
-            title='Edit JustSay'
+            title='Edit JustShout'
             onEditSubmit={onEditSubmit}
             list={list}
           />
         </Modal>
       )}
       <Card
-        title='JustSay'
+        title='JustShout'
         closeBtn={<IoClose />}
         editBtn={<MdEdit />}
         key={list.id}

@@ -1,9 +1,8 @@
-import React from 'react'
-import Head from 'next/head'
-import WidgetTools from '../components/WidgetTools'
+import WidgetTools from '../components/WidgetTools';
+import Head from 'next/head';
+import React from 'react';
 
 export default function Home() {
-
   return (
     <div>
       <Head>
@@ -11,5 +10,5 @@ export default function Home() {
       </Head>
       <WidgetTools />
     </div>
-  )
+  );
 }

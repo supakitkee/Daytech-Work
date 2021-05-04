@@ -1,101 +1,95 @@
-import React, { useState, useEffect } from "react";
-import { Card } from "../components/Layouts/Card";
-import Button from "../components/Buttons/Button";
+import React, { useState, useEffect, useRef } from 'react';
+import Button from '../components/Buttons/Button';
+import Card from '../components/Layouts/Card';
 import { IoClose } from 'react-icons/io5';
 
-export default function Timer({ title, list, onDelete, zero, setZero,mapNewData,totalTimer, setTotalTimer  }) {
-  const handleDelete = function () {
-    onDelete(list);
-  };
-
-  useEffect(() => {
-    if (zero == 'Timer') {
-      setTime(0);
-      setTimerOn(false);
-      setZero("");
-    }
-  }, [zero]);
-
-
-
+export default function Timer({ list, onDelete, onUpdateValue }) {
   let disabled = true;
-  const [time, setTime] = useState(0);
+  const timer = list.value;
   const [timerOn, setTimerOn] = useState(false);
-
-  useEffect(()=>{
-    mapNewData(list, time);
- 
-  },[time])
-
 
   useEffect(() => {
     let interval = null;
+
     if (timerOn) {
       interval = setInterval(() => {
-        setTime((prevTime) => prevTime + 10);
-      }, 10);
-    } else {
+        savedCallback.current();
+      }, 1000);
+    } // pause
+    else {
       clearInterval(interval);
     }
 
     return () => clearInterval(interval);
-  }, [timerOn]);
+  }, [timerOn, timer]);
 
-  const handleClick1 = () => {
+  const savedCallback = useRef();
+  const doingUpdateTimer = () => {
+    onUpdateValue(list.id, list.value + 1000);
+  };
+
+  useEffect(() => {
+    savedCallback.current = doingUpdateTimer;
+  });
+
+  const handleClickStart = () => {
     setTimerOn(true);
   };
 
-  const handleClick2 = () => {
+  const handleClickPause = () => {
     setTimerOn(false);
   };
 
-  const handleClick3 = () => {
-    setTime(0);
+  const handleClickReset = () => {
+    onUpdateValue(list.id, 0);
     setTimerOn(false);
   };
-  
-  list.value = time;
+
+  const handleDelete = function () {
+    onDelete(list);
+  };
+
   return (
-    <div class="md:inner md:w-1/2 pb-4 md:pr-4">
-    <Card title="Timer" 
-    key={list.id}
-    onDelete={handleDelete}
-    list={list}>
-      <div className="text-center space-x-1">
-        <div className="text-6xl mx-7 flex items-center justify-center mt-4 mb-6">
-          <span>{("0" + Math.floor((time / 60000) % 60)).slice(-2)}:</span>
-          <span>{("0" + Math.floor((time / 1000) % 60)).slice(-2)}</span>
+    <Card
+      title='Timer'
+      closeBtn={<IoClose />}
+      key={list.id}
+      onDelete={handleDelete}
+    >
+      <div className='text-center space-x-1'>
+        <div className='text-6xl mx-7 flex items-center justify-center mt-4 mb-6'>
+          <div className='text-6xl mx-7'>
+            <span>{`0${Math.floor((timer / 60000) % 60)}`.slice(-2)}:</span>
+            <span>{`0${Math.floor((timer / 1000) % 60)}`.slice(-2)}</span>
+          </div>
         </div>
         {!timerOn && (
-          <Button doClick={handleClick1} disabled={!disabled}>
+          <Button doClick={handleClickStart} disabled={!disabled}>
             Start
           </Button>
         )}
         {timerOn && (
-          <Button doClick={handleClick2} disabled={!disabled}>
+          <Button doClick={handleClickPause} disabled={!disabled}>
             Pause
           </Button>
         )}
-        {!timerOn && time == 0 && (
-          <Button doClick={handleClick3} disabled={disabled}>
+        {!timerOn && timer == 0 && (
+          <Button doClick={handleClickReset} disabled={disabled}>
             Reset
           </Button>
         )}
         {timerOn && (
-          <Button doClick={handleClick3} disabled={!disabled}>
+          <Button doClick={handleClickReset} disabled={!disabled}>
             Reset
           </Button>
         )}
-        {!timerOn && time > 0 && (
-          <Button doClick={handleClick3} disabled={!disabled}>
+        {!timerOn && timer > 0 && (
+          <Button doClick={handleClickReset} disabled={!disabled}>
             Reset
           </Button>
         )}
       </div>
-      <div className="text-xs text-gray-400">
-        <div className="mt-6 -mb-2 text-center">{list.date}</div>
-      </div>
+      <div className='mt-6 '></div>
     </Card>
-    </div>
   );
 }

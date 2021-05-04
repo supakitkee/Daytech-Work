@@ -3,7 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 /* Add the lines below */
-/* @layer utilities {
+@layer utilities {
   @variants responsive {
     .masonry {
       column-count: 2;
@@ -13,7 +13,7 @@
       break-inside: avoid;
     }
   }
-} */
+}
 html,
 body {
   padding: 0;
