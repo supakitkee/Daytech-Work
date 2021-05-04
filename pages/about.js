@@ -1,6 +1,6 @@
 import React from "react";
 import Head from "next/head";
-import Card from "../components/Layouts/Card";
+import { Card } from "../components/Layouts/Card";
 
 const about = () => {
   return (
@@ -15,7 +15,7 @@ const about = () => {
             Currently, we have only <strong>JustSay</strong>,{" "}
             <strong>Counter</strong> and <strong>Timer</strong> widgets.
           </p>
-          <p>You can now add more widgets or even destroy all of then :P</p>
+          <p>You can now add / delete widgets or even destroy all of then, edit JustSay text, view super great useless statistics!!!</p>
           <p>
             Crafted with <span className="text-red-600">♥</span> by Champ.
           </p>

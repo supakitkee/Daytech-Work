@@ -1,11 +1,32 @@
 import React, { useState, useEffect } from "react";
-import Card from "../components/Layouts/Card";
+import { Card } from "../components/Layouts/Card";
 import Button from "../components/Buttons/Button";
+import { IoClose } from 'react-icons/io5';
 
-export default function Timer({ title, list, index  }) {
+export default function Timer({ title, list, onDelete, zero, setZero,mapNewData,totalTimer, setTotalTimer  }) {
+  const handleDelete = function () {
+    onDelete(list);
+  };
+
+  useEffect(() => {
+    if (zero == 'Timer') {
+      setTime(0);
+      setTimerOn(false);
+      setZero("");
+    }
+  }, [zero]);
+
+
+
   let disabled = true;
   const [time, setTime] = useState(0);
   const [timerOn, setTimerOn] = useState(false);
+
+  useEffect(()=>{
+    mapNewData(list, time);
+ 
+  },[time])
+
 
   useEffect(() => {
     let interval = null;
@@ -36,7 +57,10 @@ export default function Timer({ title, list, index  }) {
   list.value = time;
   return (
     <div class="md:inner md:w-1/2 pb-4 md:pr-4">
-    <Card title="Timer" key={index}>
+    <Card title="Timer" 
+    key={list.id}
+    onDelete={handleDelete}
+    list={list}>
       <div className="text-center space-x-1">
         <div className="text-6xl mx-7 flex items-center justify-center mt-4 mb-6">
           <span>{("0" + Math.floor((time / 60000) % 60)).slice(-2)}:</span>

@@ -1,49 +1,58 @@
-import React, { useState } from "react";
-import Card from "../components/Layouts/Card";
+import React, { useState, useEffect } from "react";
+import { Card } from "../components/Layouts/Card";
 import Button from "../components/Buttons/Button";
+import { IoClose } from "react-icons/io5";
 
-export default function Counter({ title, list, index }) {
+export default function Counter({ title, list, onDelete, zero, setZero }) {
+  const handleDelete = function () {
+    onDelete(list);
+  };
 
-    const [count, setCount] = useState(list.value); 
-
-    let countClass =
-      "text-5xl rounded-full w-10 text-center focus:outline-none";
-    let countBlue = "text-blue-500";
-
-    let resetButton;
-    let decrease;
-    let disabled = true;
-
-    const handleClick = () => {
+  useEffect(() => {
+    if (zero == 'Counter') {
       setCount(0);
-    };
-
-    if (count == 0) {
-      resetButton = (
-        <Button doClick={handleClick} disabled={disabled}>
-          Set zero
-        </Button>
-      );
-      decrease = <button className={`${countClass} text-gray-300`}>-</button>;
-    } else {
-      resetButton = (
-        <Button doClick={handleClick} disabled={!disabled}>
-          Set zero
-        </Button>
-      );
-      decrease = (
-        <button
-          onClick={() => setCount(list.value - 1)}
-          className={`${countClass} + ${countBlue}`}
-        >
-          -
-        </button>
-      );
+      setZero("");
     }
-    list.value = count;
-    return (
-      <div class='md:inner md:w-1/2 pb-4 md:pr-4'>
-      <Card title="Counter" key={index}>
+  }, [zero]);
+
+  const [count, setCount] = useState(list.value);
+
+  let countClass = "text-5xl rounded-full w-10 text-center focus:outline-none";
+  let countBlue = "text-blue-500";
+  let resetButton;
+  let decrease;
+  let disabled = true;
+
+  const handleClick = () => {
+    setCount(0);
+  };
+
+  if (count == 0) {
+    resetButton = (
+      <Button doClick={handleClick} disabled={disabled}>
+        Set zero
+      </Button>
+    );
+    decrease = <button className={`${countClass} text-gray-300`}>-</button>;
+  } else {
+    resetButton = (
+      <Button doClick={handleClick} disabled={!disabled}>
+        Set zero
+      </Button>
+    );
+    decrease = (
+      <button
+        onClick={() => setCount(list.value - 1)}
+        className={`${countClass} + ${countBlue}`}
+      >
+        -
+      </button>
+    );
+  }
+  list.value = count;
+  return (
+    <div class="md:inner md:w-1/2 pb-4 md:pr-4">
+      <Card title="Counter" key={list.id} onDelete={handleDelete} list={list}>
         <div className="text-center">
           <div className="flex items-center justify-center mt-4 mb-6">
             {decrease}
@@ -61,7 +70,6 @@ export default function Counter({ title, list, index }) {
           </div>
         </div>
       </Card>
-      </div>
-    );
-  }
-
+    </div>
+  );
+}
